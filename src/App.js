@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import InputField from './InputField';
+import Button from './Button';
 
-function App() {
+const App = () => {
+  const { inputValue1, inputValue2, result, error } = useSelector((state) => state);
+  const dispatch = useDispatch();
+
+  const handleChange = (event, field) => {
+    dispatch({
+      type: 'UPDATE_INPUT',
+      payload: {
+        field,
+        value: event.target.value,
+      },
+    });
+  };
+
+  const handleOperation = (operator) => {
+    dispatch({
+      type: 'CALCULATE',
+      payload: {
+        operator,
+      },
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <InputField value={inputValue1} onChange={(e) => handleChange(e, 'inputValue1')} />
+      <InputField value={inputValue2} onChange={(e) => handleChange(e, 'inputValue2')} />
+      <Button text="+" onClick={() => handleOperation('+')} />
+      <Button text="-" onClick={() => handleOperation('-')} />
+      <Button text="*" onClick={() => handleOperation('*')} />
+      <Button text="/" onClick={() => handleOperation('/')} />
+      {error && <div>{error}</div>}
+      {result !== null && <div>Результат: {result}</div>}
     </div>
   );
-}
+};
 
 export default App;
+
+
+
